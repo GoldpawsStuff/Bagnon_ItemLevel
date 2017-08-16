@@ -6,7 +6,7 @@ local ItemLevel = Bagnon:NewModule("ItemLevel", Addon)
 
 -- Lua API
 local _G = _G
-local string_match = string_match
+local string_match = string.match
 local tonumber = tonumber
 
 -- WoW API
