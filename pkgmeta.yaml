@@ -1,0 +1,13 @@
+package-as: Bagnon_ItemLevel
+enable-nolib-creation: no
+
+manual-changelog:
+    filename: CHANGELOG.md
+    markup-type: markdown
+
+license-output: LICENSE.txt
+
+ignore:
+    - CHANGELOG.md
+    - README.md
+    - LICENSE.md
