@@ -11,6 +11,7 @@ local tonumber = tonumber
 
 -- WoW API
 local CreateFrame = _G.CreateFrame
+local GetDetailedItemLevelInfo = _G.GetDetailedItemLevelInfo
 local GetItemInfo = _G.GetItemInfo
 local GetItemQualityColor = _G.GetItemQualityColor
 local IsArtifactRelicItem = _G.IsArtifactRelicItem
@@ -41,21 +42,24 @@ local updateSlot = function(self)
 		end
 
 		local _, _, itemRarity, iLevel, _, _, _, _, itemEquipLoc = GetItemInfo(itemLink)
+		local effectiveLevel, previewLevel, origLevel = GetDetailedItemLevelInfo and GetDetailedItemLevelInfo(itemLink)
 		local itemID = tonumber(string_match(itemLink, "item:(%d+)"))
 
 		-- Display item level of equippable gear and artifact relics
 		if (itemRarity and (itemRarity > 1)) and ((itemEquipLoc and _G[itemEquipLoc]) or (itemID and IsArtifactRelicItem and IsArtifactRelicItem(itemID))) then
 			local r, g, b = GetItemQualityColor(itemRarity)
 			cache[self]:SetTextColor(r, g, b)
-			cache[self]:SetText(iLevel or "")
+			cache[self]:SetText(effectiveLevel or iLevel or "")
 		else
 			cache[self]:SetText("")
         end
+
 	else
 		if cache[self] then
 			cache[self]:SetText("")
 		end
 	end	
+
 
 end
 
