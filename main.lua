@@ -38,8 +38,16 @@ local updateSlot = function(self)
 			itemLevel:SetShadowOffset(1, -1)
 			itemLevel:SetShadowColor(0, 0, 0, .5)
 
+			-- Move Pawn out of the way
+			if self.UpgradeIcon then
+				self.UpgradeIcon:ClearAllPoints()
+				self.UpgradeIcon:SetPoint("BOTTOMLEFT", 0, 2)
+			end
+
 			cache[self] = itemLevel
 		end
+
+		local itemLevel = cache[self]
 
 		local _, _, itemRarity, iLevel, _, _, _, _, itemEquipLoc = GetItemInfo(itemLink)
 		local effectiveLevel, previewLevel, origLevel = GetDetailedItemLevelInfo and GetDetailedItemLevelInfo(itemLink)
@@ -48,10 +56,10 @@ local updateSlot = function(self)
 		-- Display item level of equippable gear and artifact relics
 		if (itemRarity and (itemRarity > 1)) and ((itemEquipLoc and _G[itemEquipLoc]) or (itemID and IsArtifactRelicItem and IsArtifactRelicItem(itemID))) then
 			local r, g, b = GetItemQualityColor(itemRarity)
-			cache[self]:SetTextColor(r, g, b)
-			cache[self]:SetText(effectiveLevel or iLevel or "")
+			itemLevel:SetTextColor(r, g, b)
+			itemLevel:SetText(effectiveLevel or iLevel or "")
 		else
-			cache[self]:SetText("")
+			itemLevel:SetText("")
         end
 
 	else
