@@ -26,7 +26,7 @@ local updateSlot = function(self)
 
 		if (not cache[self]) then
 			-- Adding an extra layer to get it above glow and border textures
-			local holder = CreateFrame("Frame", nil, self)
+			local holder = _G[self:GetName().."ExtraInfoFrame"] or CreateFrame("Frame", self:GetName().."ExtraInfoFrame", self)
 			holder:SetAllPoints()
 
 			-- Using standard blizzard fonts here
@@ -41,7 +41,7 @@ local updateSlot = function(self)
 			-- Move Pawn out of the way
 			if self.UpgradeIcon then
 				self.UpgradeIcon:ClearAllPoints()
-				self.UpgradeIcon:SetPoint("BOTTOMLEFT", 0, 2)
+				self.UpgradeIcon:SetPoint("BOTTOMRIGHT", 2, 0)
 			end
 
 			cache[self] = itemLevel
