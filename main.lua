@@ -19,59 +19,64 @@ local IsArtifactRelicItem = _G.IsArtifactRelicItem
 -- Cache of itemlevel texts
 local cache = {}
 
-local updateSlot = function(self)
+-- Initialize the button
+local initButton = function(self)
 
-	local itemLink = self:GetItem() -- GetContainerItemLink(self:GetBag(), self:GetID())
-	if itemLink then
+	-- Adding an extra layer to get it above glow and border textures
+	local holder = _G[self:GetName().."ExtraInfoFrame"] or CreateFrame("Frame", self:GetName().."ExtraInfoFrame", self)
+	holder:SetAllPoints()
 
-		if (not cache[self]) then
-			-- Adding an extra layer to get it above glow and border textures
-			local holder = _G[self:GetName().."ExtraInfoFrame"] or CreateFrame("Frame", self:GetName().."ExtraInfoFrame", self)
-			holder:SetAllPoints()
+	-- Using standard blizzard fonts here
+	local itemLevel = holder:CreateFontString()
+	itemLevel:SetDrawLayer("ARTWORK")
+	itemLevel:SetPoint("TOPLEFT", 2, -2)
+	itemLevel:SetFontObject(_G.NumberFont_Outline_Med or _G.NumberFontNormal) 
+	itemLevel:SetFont(itemLevel:GetFont(), 14, "OUTLINE")
+	itemLevel:SetShadowOffset(1, -1)
+	itemLevel:SetShadowColor(0, 0, 0, .5)
 
-			-- Using standard blizzard fonts here
-			local itemLevel = holder:CreateFontString()
-			itemLevel:SetDrawLayer("ARTWORK")
-			itemLevel:SetPoint("TOPLEFT", 2, -2)
-			itemLevel:SetFontObject(_G.NumberFont_Outline_Med or _G.NumberFontNormal) 
-			itemLevel:SetFont(itemLevel:GetFont(), 14, "OUTLINE")
-			itemLevel:SetShadowOffset(1, -1)
-			itemLevel:SetShadowColor(0, 0, 0, .5)
+	-- Move Pawn out of the way
+	local upgradeIcon = self.UpgradeIcon
+	if upgradeIcon then
+		upgradeIcon:ClearAllPoints()
+		upgradeIcon:SetPoint("BOTTOMRIGHT", 2, 0)
+	end
 
-			-- Move Pawn out of the way
-			if self.UpgradeIcon then
-				self.UpgradeIcon:ClearAllPoints()
-				self.UpgradeIcon:SetPoint("BOTTOMRIGHT", 2, 0)
-			end
+	-- Store the reference for the next time
+	cache[self] = itemLevel
 
-			cache[self] = itemLevel
-		end
-
-		local itemLevel = cache[self]
-
-		local _, _, itemRarity, iLevel, _, _, _, _, itemEquipLoc = GetItemInfo(itemLink)
-		local effectiveLevel, previewLevel, origLevel = GetDetailedItemLevelInfo and GetDetailedItemLevelInfo(itemLink)
-		local itemID = tonumber(string_match(itemLink, "item:(%d+)"))
-
-		-- Display item level of equippable gear and artifact relics
-		if (itemRarity and (itemRarity > 1)) and ((itemEquipLoc and _G[itemEquipLoc]) or (itemID and IsArtifactRelicItem and IsArtifactRelicItem(itemID))) then
-			local r, g, b = GetItemQualityColor(itemRarity)
-			itemLevel:SetTextColor(r, g, b)
-			itemLevel:SetText(effectiveLevel or iLevel or "")
-		else
-			itemLevel:SetText("")
-        end
-
-	else
-		if cache[self] then
-			cache[self]:SetText("")
-		end
-	end	
-
-
+	return itemLevel
 end
 
 ItemLevel.OnEnable = function(self)
-	hooksecurefunc(Bagnon.ItemSlot, "Update", updateSlot)
+	hooksecurefunc(Bagnon.ItemSlot, "Update", function(self)
+		local itemLink = self:GetItem() -- GetContainerItemLink(self:GetBag(), self:GetID())
+		if itemLink then
+
+			-- Retrieve or create this button's itemlevel text
+			local itemLevel = cache[self] or initButton(self)
+
+			-- Get some blizzard info about the current item
+			local _, _, itemRarity, iLevel, _, _, _, _, itemEquipLoc = GetItemInfo(itemLink)
+			local effectiveLevel, previewLevel, origLevel = GetDetailedItemLevelInfo and GetDetailedItemLevelInfo(itemLink)
+
+			-- Retrieve the itemID from the itemLink
+			local itemID = tonumber(string_match(itemLink, "item:(%d+)"))
+
+			-- Display item level of equippable gear and artifact relics
+			if (itemRarity and (itemRarity > 1)) and ((itemEquipLoc and _G[itemEquipLoc]) or (itemID and IsArtifactRelicItem and IsArtifactRelicItem(itemID))) then
+				local r, g, b = GetItemQualityColor(itemRarity)
+				itemLevel:SetTextColor(r, g, b)
+				itemLevel:SetText(effectiveLevel or iLevel or "")
+			else
+				itemLevel:SetText("")
+			end
+
+		else
+			if cache[self] then
+				cache[self]:SetText("")
+			end
+		end	
+	end)
 end
 

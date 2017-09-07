@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/) 
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [1.0.7] 2017-09-07
+### Changed
+- Optimized the code, reduced number of existance checks.
+
 ## [1.0.6] 2017-09-05
 ### Changed
 - Moved the upgrade arrow used by Pawn yet again, to make it compatible with both this and the Bagnon_BoE addon.
