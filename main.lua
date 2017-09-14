@@ -11,10 +11,10 @@ local tonumber = tonumber
 
 -- WoW API
 local CreateFrame = _G.CreateFrame
-local GetDetailedItemLevelInfo = _G.GetDetailedItemLevelInfo
+local GetDetailedItemLevelInfo = _G.GetDetailedItemLevelInfo -- 7.1.0
 local GetItemInfo = _G.GetItemInfo
 local GetItemQualityColor = _G.GetItemQualityColor
-local IsArtifactRelicItem = _G.IsArtifactRelicItem
+local IsArtifactRelicItem = _G.IsArtifactRelicItem -- 7.0.3
 
 -- Cache of itemlevel texts
 local cache = {}
@@ -48,35 +48,94 @@ local initButton = function(self)
 	return itemLevel
 end
 
-ItemLevel.OnEnable = function(self)
-	hooksecurefunc(Bagnon.ItemSlot, "Update", function(self)
-		local itemLink = self:GetItem() -- GetContainerItemLink(self:GetBag(), self:GetID())
-		if itemLink then
+local updateButton = (GetDetailedItemLevelInfo and IsArtifactRelicItem) and function(self)
+	local itemLink = self:GetItem() 
+	if itemLink then
 
-			-- Retrieve or create this button's itemlevel text
-			local itemLevel = cache[self] or initButton(self)
+		-- Retrieve or create this button's itemlevel text
+		local itemLevel = cache[self] or initButton(self)
 
-			-- Get some blizzard info about the current item
-			local _, _, itemRarity, iLevel, _, _, _, _, itemEquipLoc = GetItemInfo(itemLink)
-			local effectiveLevel, previewLevel, origLevel = GetDetailedItemLevelInfo and GetDetailedItemLevelInfo(itemLink)
+		-- Get some blizzard info about the current item
+		local _, _, itemRarity, iLevel, _, _, _, _, itemEquipLoc = GetItemInfo(itemLink)
+		local effectiveLevel, previewLevel, origLevel = GetDetailedItemLevelInfo(itemLink)
 
-			-- Retrieve the itemID from the itemLink
-			local itemID = tonumber(string_match(itemLink, "item:(%d+)"))
+		-- Retrieve the itemID from the itemLink
+		local itemID = tonumber(string_match(itemLink, "item:(%d+)"))
 
-			-- Display item level of equippable gear and artifact relics
-			if (itemRarity and (itemRarity > 1)) and ((itemEquipLoc and _G[itemEquipLoc]) or (itemID and IsArtifactRelicItem and IsArtifactRelicItem(itemID))) then
-				local r, g, b = GetItemQualityColor(itemRarity)
-				itemLevel:SetTextColor(r, g, b)
-				itemLevel:SetText(effectiveLevel or iLevel or "")
-			else
-				itemLevel:SetText("")
-			end
-
+		-- Display item level of equippable gear and artifact relics
+		if (itemRarity and (itemRarity > 1)) and ((itemEquipLoc and _G[itemEquipLoc]) or (itemID and IsArtifactRelicItem(itemID))) then
+			local r, g, b = GetItemQualityColor(itemRarity)
+			itemLevel:SetTextColor(r, g, b)
+			itemLevel:SetText(effectiveLevel or iLevel or "")
 		else
-			if cache[self] then
-				cache[self]:SetText("")
-			end
-		end	
-	end)
-end
+			itemLevel:SetText("")
+		end
 
+	else
+		if cache[self] then
+			cache[self]:SetText("")
+		end
+	end	
+end 
+or 
+IsArtifactRelicItem and function(self)
+	local itemLink = self:GetItem() 
+	if itemLink then
+
+		-- Retrieve or create this button's itemlevel text
+		local itemLevel = cache[self] or initButton(self)
+
+		-- Get some blizzard info about the current item
+		local _, _, itemRarity, iLevel, _, _, _, _, itemEquipLoc = GetItemInfo(itemLink)
+
+		-- Retrieve the itemID from the itemLink
+		local itemID = tonumber(string_match(itemLink, "item:(%d+)"))
+
+		-- Display item level of equippable gear and artifact relics
+		if (itemRarity and (itemRarity > 1)) and ((itemEquipLoc and _G[itemEquipLoc]) or (itemID and IsArtifactRelicItem(itemID))) then
+			local r, g, b = GetItemQualityColor(itemRarity)
+			itemLevel:SetTextColor(r, g, b)
+			itemLevel:SetText(iLevel or "")
+		else
+			itemLevel:SetText("")
+		end
+
+	else
+		if cache[self] then
+			cache[self]:SetText("")
+		end
+	end	
+end 
+or 
+function(self)
+	local itemLink = self:GetItem() 
+	if itemLink then
+
+		-- Retrieve or create this button's itemlevel text
+		local itemLevel = cache[self] or initButton(self)
+
+		-- Get some blizzard info about the current item
+		local _, _, itemRarity, iLevel, _, _, _, _, itemEquipLoc = GetItemInfo(itemLink)
+
+		-- Retrieve the itemID from the itemLink
+		local itemID = tonumber(string_match(itemLink, "item:(%d+)"))
+
+		-- Display item level of equippable gear and artifact relics
+		if (itemRarity and (itemRarity > 1)) and ((itemEquipLoc and _G[itemEquipLoc])) then
+			local r, g, b = GetItemQualityColor(itemRarity)
+			itemLevel:SetTextColor(r, g, b)
+			itemLevel:SetText(iLevel or "")
+		else
+			itemLevel:SetText("")
+		end
+
+	else
+		if cache[self] then
+			cache[self]:SetText("")
+		end
+	end	
+end 
+
+ItemLevel.OnEnable = function(self)
+	hooksecurefunc(Bagnon.ItemSlot, "Update", updateButton)
+end 

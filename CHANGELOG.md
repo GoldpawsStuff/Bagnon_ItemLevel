@@ -4,9 +4,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/) 
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [1.0.8] 2017-09-14
+### Changed
+- Slight code optimization, even less existence checks.
+
 ## [1.0.7] 2017-09-07
 ### Changed
-- Optimized the code, reduced number of existance checks.
+- Optimized the code, reduced number of existence checks.
 
 ## [1.0.6] 2017-09-05
 ### Changed
