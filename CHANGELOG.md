@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/) 
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [1.0.9] 2017-12-21
+### Fixed
+- Changed how artifacts and relics are scanned in WoW patch 7.3.0. Finally shows the upgraded crucible item levels! 
+
 ## [1.0.8] 2017-09-14
 ### Changed
 - Slight code optimization, even less existence checks.
