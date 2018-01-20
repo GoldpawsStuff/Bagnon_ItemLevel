@@ -95,7 +95,7 @@ local updateButton = (GetDetailedItemLevelInfo and IsArtifactRelicItem) and func
 		local itemID = tonumber(string_match(itemLink, "item:(%d+)"))
 
 		-- Display item level of equippable gear and artifact relics
-		if (itemRarity and (itemRarity > 1)) and ((itemEquipLoc and _G[itemEquipLoc]) or (itemID and IsArtifactRelicItem(itemID))) then
+		if (itemRarity and (itemRarity > 0)) and ((itemEquipLoc and _G[itemEquipLoc]) or (itemID and IsArtifactRelicItem(itemID))) then
 
 			local crucibleLevel
 			if LEGION_730 then

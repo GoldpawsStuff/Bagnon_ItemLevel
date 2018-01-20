@@ -21,6 +21,7 @@ There are thousands of users, but most are content to simply download and use th
 
 * Discord: [Mqnrr8t](https://discord.gg/Mqnrr8t)
 * Facebook: [@cogwerkz](https://www.facebook.com/cogwerkz)
+* Twitter: [@CogwerkzUI](https://twitter.com/CogwerkzUI)
 
 ## Buy me a beer
 Making addons and full UIs like mine takes a lot of time and effort, as they're all one-man projects. I do it because I love doing it, because I believe it makes the game better and more enjoyable. But still, a lot of hours are put into it.
