@@ -80,6 +80,16 @@ local initButton = function(self)
 	return itemLevel
 end
 
+-- Check if it's a caged battle pet
+local battlePetInfo = function(itemLink)
+	if (not string_find(itemLink, "battlepet")) then
+		return
+	end
+	local data, name = string_match(itemLink, "|H(.-)|h(.-)|h")
+	local  _, _, level, rarity = string_match(data, "(%w+):(%d+):(%d+):(%d+)")
+	return true, level or 1, tonumber(rarity) or 0
+end
+
 local updateButton = (GetDetailedItemLevelInfo and IsArtifactRelicItem) and function(self)
 	local itemLink = self:GetItem() 
 	if itemLink then
@@ -94,12 +104,14 @@ local updateButton = (GetDetailedItemLevelInfo and IsArtifactRelicItem) and func
 		-- Retrieve the itemID from the itemLink
 		local itemID = tonumber(string_match(itemLink, "item:(%d+)"))
 
+		-- Retrieve potential BattlePet information
+		local isBattlePet, battlePetLevel, battlePetRarity = battlePetInfo(itemLink)
+
 		-- Display item level of equippable gear and artifact relics
-		if (itemRarity and (itemRarity > 0)) and ((itemEquipLoc and _G[itemEquipLoc]) or (itemID and IsArtifactRelicItem(itemID))) then
+		if ((itemRarity and (itemRarity > 0)) and ((itemEquipLoc and _G[itemEquipLoc]) or (itemID and IsArtifactRelicItem(itemID)))) or (isBattlePet) then
 
 			local crucibleLevel
-			if LEGION_730 then
-			
+			if ((not isBattlePet) and LEGION_730) then
 				scanner.owner = self
 				scanner:SetOwner(self, "ANCHOR_NONE")
 				scanner:SetBagItem(self:GetBag(), self:GetID())
@@ -128,9 +140,10 @@ local updateButton = (GetDetailedItemLevelInfo and IsArtifactRelicItem) and func
 				end
 			end
 
-			local r, g, b = GetItemQualityColor(itemRarity)
+			local r, g, b = GetItemQualityColor(battlePetRarity or itemRarity)
 			itemLevel:SetTextColor(r, g, b)
-			itemLevel:SetText(crucibleLevel or effectiveLevel or iLevel or "")
+			itemLevel:SetText(crucibleLevel or battlePetLevel or effectiveLevel or iLevel or "")
+
 		else
 			itemLevel:SetText("")
 		end
@@ -155,11 +168,14 @@ IsArtifactRelicItem and function(self)
 		-- Retrieve the itemID from the itemLink
 		local itemID = tonumber(string_match(itemLink, "item:(%d+)"))
 
+		-- Retrieve potential BattlePet information
+		local isBattlePet, battlePetLevel, battlePetRarity = battlePetInfo(itemLink)
+
 		-- Display item level of equippable gear and artifact relics
-		if (itemRarity and (itemRarity > 1)) and ((itemEquipLoc and _G[itemEquipLoc]) or (itemID and IsArtifactRelicItem(itemID))) then
-			local r, g, b = GetItemQualityColor(itemRarity)
+		if ((itemRarity and (itemRarity > 1)) and ((itemEquipLoc and _G[itemEquipLoc]) or (itemID and IsArtifactRelicItem(itemID)))) or (isBattlePet) then
+			local r, g, b = GetItemQualityColor(battlePetRarity or itemRarity)
 			itemLevel:SetTextColor(r, g, b)
-			itemLevel:SetText(iLevel or "")
+			itemLevel:SetText(battlePetLevel or iLevel or "")
 		else
 			itemLevel:SetText("")
 		end
@@ -184,11 +200,14 @@ function(self)
 		-- Retrieve the itemID from the itemLink
 		local itemID = tonumber(string_match(itemLink, "item:(%d+)"))
 
+		-- Retrieve potential BattlePet information
+		local isBattlePet, battlePetLevel, battlePetRarity = battlePetInfo(itemLink)
+
 		-- Display item level of equippable gear and artifact relics
-		if (itemRarity and (itemRarity > 1)) and ((itemEquipLoc and _G[itemEquipLoc])) then
-			local r, g, b = GetItemQualityColor(itemRarity)
+		if ((itemRarity and (itemRarity > 1)) and ((itemEquipLoc and _G[itemEquipLoc]))) or (isBattlePet) then
+			local r, g, b = GetItemQualityColor(battlePetRarity or itemRarity)
 			itemLevel:SetTextColor(r, g, b)
-			itemLevel:SetText(iLevel or "")
+			itemLevel:SetText(battlePetLevel or iLevel or "")
 		else
 			itemLevel:SetText("")
 		end

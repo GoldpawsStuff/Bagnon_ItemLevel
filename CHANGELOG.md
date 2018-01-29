@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/) 
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [1.0.11] 2018-1-29
+### Added
+- Now also shows the level of caged Battle Pets in your bags.
+
 ## [1.0.10] 2018-1-20
 ### Changed
 - The item level of Common (white) quality items like starter zone vendor gear and beginner Fishing Poles are now also displayed.
