@@ -110,8 +110,8 @@ local updateButton = (GetDetailedItemLevelInfo and IsArtifactRelicItem) and func
 		-- Display item level of equippable gear and artifact relics
 		if ((itemRarity and (itemRarity > 0)) and ((itemEquipLoc and _G[itemEquipLoc]) or (itemID and IsArtifactRelicItem(itemID)))) or (isBattlePet) then
 
-			local crucibleLevel
-			if ((not isBattlePet) and LEGION_730) then
+			local scannedLevelscannedLevel
+			if (not isBattlePet) then
 				scanner.owner = self
 				scanner:SetOwner(self, "ANCHOR_NONE")
 				scanner:SetBagItem(self:GetBag(), self:GetID())
@@ -122,7 +122,7 @@ local updateButton = (GetDetailedItemLevelInfo and IsArtifactRelicItem) and func
 					if msg and string_find(msg, S_ITEM_LEVEL) then
 						local itemLevel = string_match(msg, S_ITEM_LEVEL)
 						if itemLevel and (tonumber(itemLevel) > 0) then
-							crucibleLevel = itemLevel
+							scannedLevel = itemLevel
 						end
 					else
 						-- Check line 3, some artifacts have the ilevel there
@@ -132,7 +132,7 @@ local updateButton = (GetDetailedItemLevelInfo and IsArtifactRelicItem) and func
 							if msg and string_find(msg, S_ITEM_LEVEL) then
 								local itemLevel = string_match(msg, S_ITEM_LEVEL)
 								if itemLevel and (tonumber(itemLevel) > 0) then
-									crucibleLevel = itemLevel
+									scannedLevel = itemLevel
 								end
 							end
 						end
@@ -142,7 +142,7 @@ local updateButton = (GetDetailedItemLevelInfo and IsArtifactRelicItem) and func
 
 			local r, g, b = GetItemQualityColor(battlePetRarity or itemRarity)
 			itemLevel:SetTextColor(r, g, b)
-			itemLevel:SetText(crucibleLevel or battlePetLevel or effectiveLevel or iLevel or "")
+			itemLevel:SetText(scannedLevel or battlePetLevel or effectiveLevel or iLevel or "")
 
 		else
 			itemLevel:SetText("")
