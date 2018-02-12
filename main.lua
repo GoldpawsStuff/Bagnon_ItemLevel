@@ -100,17 +100,15 @@ local updateButton = (GetDetailedItemLevelInfo and IsArtifactRelicItem) and func
 		-- Get some blizzard info about the current item
 		local _, _, itemRarity, iLevel, _, _, _, _, itemEquipLoc = GetItemInfo(itemLink)
 		local effectiveLevel, previewLevel, origLevel = GetDetailedItemLevelInfo(itemLink)
+		local isBattlePet, battlePetLevel, battlePetRarity = battlePetInfo(itemLink)
 
 		-- Retrieve the itemID from the itemLink
 		local itemID = tonumber(string_match(itemLink, "item:(%d+)"))
 
-		-- Retrieve potential BattlePet information
-		local isBattlePet, battlePetLevel, battlePetRarity = battlePetInfo(itemLink)
-
 		-- Display item level of equippable gear and artifact relics
 		if ((itemRarity and (itemRarity > 0)) and ((itemEquipLoc and _G[itemEquipLoc]) or (itemID and IsArtifactRelicItem(itemID)))) or (isBattlePet) then
 
-			local scannedLevelscannedLevel
+			local scannedLevel
 			if (not isBattlePet) then
 				scanner.owner = self
 				scanner:SetOwner(self, "ANCHOR_NONE")
@@ -164,12 +162,10 @@ IsArtifactRelicItem and function(self)
 
 		-- Get some blizzard info about the current item
 		local _, _, itemRarity, iLevel, _, _, _, _, itemEquipLoc = GetItemInfo(itemLink)
+		local isBattlePet, battlePetLevel, battlePetRarity = battlePetInfo(itemLink)
 
 		-- Retrieve the itemID from the itemLink
 		local itemID = tonumber(string_match(itemLink, "item:(%d+)"))
-
-		-- Retrieve potential BattlePet information
-		local isBattlePet, battlePetLevel, battlePetRarity = battlePetInfo(itemLink)
 
 		-- Display item level of equippable gear and artifact relics
 		if ((itemRarity and (itemRarity > 1)) and ((itemEquipLoc and _G[itemEquipLoc]) or (itemID and IsArtifactRelicItem(itemID)))) or (isBattlePet) then

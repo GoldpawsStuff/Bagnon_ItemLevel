@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/) 
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [1.0.13] 2018-02-12
+### Fixed
+- Fixed a typo that sometimes would cause unpredictable results on items like offhand mud snappers and other obscure "weapons". 
+
 ## [1.0.12] 2018-02-08
 ### Changed
 - Changed to pure tooltip scanning for all item levels, to avoid problems with heirlooms being identified as having a higher item level than their maximum level would allow. 
