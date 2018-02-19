@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/) 
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [1.0.14] 2018-02-19
+### Added
+- Bags no longer have their rather useless item level displayed, but will instead show their number of slots!
+
 ## [1.0.13] 2018-02-12
 ### Fixed
 - Fixed a typo that sometimes would cause unpredictable results on items like offhand mud snappers and other obscure "weapons". 

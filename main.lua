@@ -49,7 +49,10 @@ local scannerName = scanner:GetName()
 
 -- Tooltip and scanning by Phanx @ http://www.wowinterface.com/forums/showthread.php?p=271406
 local S_ITEM_LEVEL = "^" .. string_gsub(_G.ITEM_LEVEL, "%%d", "(%%d+)")
-
+local S_CONTAINER_SLOTS = _G.CONTAINER_SLOTS
+S_CONTAINER_SLOTS = string_gsub(S_CONTAINER_SLOTS, "%%d", "(%%d+)")
+S_CONTAINER_SLOTS = string_gsub(S_CONTAINER_SLOTS, "%%s", "(%.+)") -- in search patterns 's' are spaces, can't be using that
+S_CONTAINER_SLOTS = "^" .. S_CONTAINER_SLOTS
 
 -- Initialize the button
 local initButton = function(self)
@@ -98,15 +101,53 @@ local updateButton = (GetDetailedItemLevelInfo and IsArtifactRelicItem) and func
 		local itemLevel = cache[self] or initButton(self)
 
 		-- Get some blizzard info about the current item
-		local _, _, itemRarity, iLevel, _, _, _, _, itemEquipLoc = GetItemInfo(itemLink)
+		local _, _, itemRarity, iLevel, _, itemType, itemSubType, _, itemEquipLoc = GetItemInfo(itemLink)
 		local effectiveLevel, previewLevel, origLevel = GetDetailedItemLevelInfo(itemLink)
 		local isBattlePet, battlePetLevel, battlePetRarity = battlePetInfo(itemLink)
 
 		-- Retrieve the itemID from the itemLink
 		local itemID = tonumber(string_match(itemLink, "item:(%d+)"))
 
+		if (itemEquipLoc == "INVTYPE_BAG") then 
+
+			scanner.owner = self
+			scanner:SetOwner(self, "ANCHOR_NONE")
+			scanner:SetBagItem(self:GetBag(), self:GetID())
+
+			local scannedSlots
+			local line = _G[scannerName.."TextLeft3"]
+			if line then
+				local msg = line:GetText()
+				if msg and string_find(msg, S_CONTAINER_SLOTS) then
+					local bagSlots = string_match(msg, S_CONTAINER_SLOTS)
+					if bagSlots and (tonumber(bagSlots) > 0) then
+						scannedSlots = bagSlots
+					end
+				else
+					line = _G[scannerName.."TextLeft4"]
+					if line then
+						local msg = line:GetText()
+						if msg and string_find(msg, S_CONTAINER_SLOTS) then
+							local bagSlots = string_match(msg, S_CONTAINER_SLOTS)
+							if bagSlots and (tonumber(bagSlots) > 0) then
+								scannedSlots = bagSlots
+							end
+						end
+					end
+				end
+			end
+
+			if scannedSlots then 
+				--local r, g, b = GetItemQualityColor(itemRarity)
+				local r, g, b = 240/255, 240/255, 240/255
+				itemLevel:SetTextColor(r, g, b)
+				itemLevel:SetText(scannedSlots)
+			else 
+				itemLevel:SetText("")
+			end 
+
 		-- Display item level of equippable gear and artifact relics
-		if ((itemRarity and (itemRarity > 0)) and ((itemEquipLoc and _G[itemEquipLoc]) or (itemID and IsArtifactRelicItem(itemID)))) or (isBattlePet) then
+		elseif ((itemRarity and (itemRarity > 0)) and ((itemEquipLoc and _G[itemEquipLoc]) or (itemID and IsArtifactRelicItem(itemID)))) or (isBattlePet) then
 
 			local scannedLevel
 			if (not isBattlePet) then
