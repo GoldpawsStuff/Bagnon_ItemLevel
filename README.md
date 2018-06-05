@@ -8,9 +8,9 @@ This addon is compatible with Bagnon for WoW 3.3.5a - 7.3.0.
 If you're familiar with git, simply clone the repository to a folder named **Bagnon_ItemLevel** inside your World of Warcraft addons folder. If not, and you need to do this manually, then download and unzip it to your `World of Warcraft\Interface\AddOns\` directory. Rename the folder from **Bagnon_ItemLevel-master** to just **Bagnon_ItemLevel**, or the game won't find it. Also, make sure the game is closed when moving new files into the addon directory as it is unable to discover new files when it's already running. 
 
 ## Report bugs, suggest features, development progress
-Bug reports and feature suggestions are all done through GitHub's Issue tracker linked below. 
+Bug reports and feature suggestions are all done through BitBucket's Issue tracker linked below. 
 
-* Issues: [github.com/cogwerkz/Bagnon_ItemLevel/issues](https://github.com/cogwerkz/Bagnon_ItemLevel/issues)
+* Issues: [bitbucket.org/bigcogs/bagnon_itemlevel/issuess](https://bitbucket.org/bigcogs/bagnon_itemlevel/issues)
 
 ## Join the community
 * Discord: [Mqnrr8t](https://discord.gg/Mqnrr8t)
