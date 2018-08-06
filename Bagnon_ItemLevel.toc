@@ -1,4 +1,4 @@
-## Interface: 70300
+## Interface: 80000
 ## Title: Bagnon |cffa335eeItemLevel|r
 ## Author: Lars "Goldpaw" Norberg
 ## Notes: |cff666666By Lars "Goldpaw" Norberg|r |n|n|cffffffffA simple Bagnon plugin that displays |nthe itemlevel of your equipable gear |nand Artifact Relics.|r|n|n|cff4488ffThis addon supports:|r|nWotLK |cff6666663.3.5a|r|nCata |cff6666664.3.4|r|nMoP |cff6666665.4.8|r|nLegion |cff6666667.1.5 - 7.3.5|r|n|n|cff4488ffPayPal|r|cffffffff:|r |n|cffffffffpaypal@cogwerkz.org|r |n|n|cff4488ffPayPal.Me|r|cffffffff:|r|n|cffffffffwww.paypal.me/larsnorberg|r|n|n|cff4488ffPatreon|r|cffffffff:|r |n|cffffffffwww.patreon.com/cogwerkz|r|n|n
