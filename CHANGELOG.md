@@ -4,6 +4,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/) 
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [1.0.17] 2018-08-14
+### Changed
+- Code optimization. 
+
+### Removed
+- Removed deprecated backwards compatibility. Use older versions for that if needed.
+
 ## [1.0.16] 2018-08-06
 ### Changed
 - Updated TOC version to 8.0.1. 
