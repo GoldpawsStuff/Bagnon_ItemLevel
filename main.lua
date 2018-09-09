@@ -24,25 +24,6 @@ local IsArtifactRelicItem = _G.IsArtifactRelicItem
 -- Cache of itemlevel texts
 local ButtonCache = {}
 
--- Current game client build
-local BUILD = tonumber((select(2, GetBuildInfo()))) 
-
--- Whether or not we need to scan for extra item levels on the artifact
-local LEGION_730 = BUILD >= 24500 
-local LEGION_730_CRUCIBLE = LEGION_730 and select(4, GetAchievementInfo(12072))
-
--- In case of a fresh character in patch 7.3.0, we listen for the achievement
-if LEGION_730 and (not LEGION_730_CRUCIBLE) then
-	local eventListener = CreateFrame("Frame")
-	eventListener:RegisterEvent("ACHIEVEMENT_EARNED")
-	eventListener:SetScript("OnEvent", function(self, event, id) 
-		if (id == 12072) then
-			LEGION_730_CRUCIBLE = true
-			self:UnregisterEvent(event)
-		end
-	end)
-end
-
 -- Tooltip used for scanning
 local ScannerTip = CreateFrame("GameTooltip", "BagnonArtifactItemLevelScannerTooltip", WorldFrame, "GameTooltipTemplate")
 local ScannerTipName = ScannerTip:GetName()

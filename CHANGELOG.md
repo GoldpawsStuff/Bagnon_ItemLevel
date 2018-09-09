@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/) 
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [1.0.18] 2018-09-09
+### Removed
+- Removed redundant checks for Crucible additions to Legion artifacts. We neither need them nor use them anymore, as item levels are all retrieved from a hidden scanner tooltip. 
+
 ## [1.0.17] 2018-08-14
 ### Changed
 - Code optimization. 
