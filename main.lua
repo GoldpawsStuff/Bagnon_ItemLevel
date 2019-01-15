@@ -78,7 +78,7 @@ local PostUpdateButton = function(self)
 		local ItemLevel = ButtonCache[self] or CacheButton(self)
 
 		-- Get some blizzard info about the current item
-		local _, _, itemRarity, iLevel, _, itemType, itemSubType, _, itemEquipLoc = GetItemInfo(itemLink)
+		local itemName, _itemLink, itemRarity, itemLevel, itemMinLevel, itemType, itemSubType, itemStackCount, itemEquipLoc, iconFileDataID, itemSellPrice, itemClassID, itemSubClassID, bindType, expacID, itemSetID, isCraftingReagent = GetItemInfo(itemLink)
 		local effectiveLevel, previewLevel, origLevel = GetDetailedItemLevelInfo(itemLink)
 		local isBattlePet, battlePetLevel, battlePetRarity = GetBattlePetInfo(itemLink)
 
