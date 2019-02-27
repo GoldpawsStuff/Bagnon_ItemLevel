@@ -1,8 +1,14 @@
+if IsAddOnLoaded("Bagnon_ItemInfo") then 
+	return DisableAddOn((...), true) 
+end 
 
--- Using the Bagnon way to retrieve names, namespaces and stuff
 local MODULE =  ...
 local ADDON, Addon = MODULE:match("[^_]+"), _G[MODULE:match("[^_]+")]
 local Module = Bagnon:NewModule("ItemLevel", Addon)
+
+-- Tooltip used for scanning
+local ScannerTip = _G.BagnonItemInfoScannerTooltip or CreateFrame("GameTooltip", "BagnonItemInfoScannerTooltip", WorldFrame, "GameTooltipTemplate")
+local ScannerTipName = ScannerTip:GetName()
 
 -- Lua API
 local _G = _G
@@ -21,61 +27,78 @@ local GetItemInfo = _G.GetItemInfo
 local GetItemQualityColor = _G.GetItemQualityColor
 local IsArtifactRelicItem = _G.IsArtifactRelicItem 
 
--- Cache of itemlevel texts
-local ButtonCache = {}
-
--- Tooltip used for scanning
-local ScannerTip = CreateFrame("GameTooltip", "BagnonArtifactItemLevelScannerTooltip", WorldFrame, "GameTooltipTemplate")
-local ScannerTipName = ScannerTip:GetName()
-
 -- Tooltip and scanning by Phanx @ http://www.wowinterface.com/forums/showthread.php?p=271406
 local S_ITEM_LEVEL = "^" .. string_gsub(_G.ITEM_LEVEL, "%%d", "(%%d+)")
 local S_CONTAINER_SLOTS = "^" .. string_gsub(string_gsub(_G.CONTAINER_SLOTS, "%%d", "(%%d+)"), "%%s", "(%.+)")
 
--- Initialize the button
-local CacheButton = function(self)
+-- FontString Caches
+local Cache_ItemLevel = {}
 
-	-- Adding an extra layer to get it above glow and border textures
-	local PluginContainerFrame = _G[self:GetName().."ExtraInfoFrame"] or CreateFrame("Frame", self:GetName().."ExtraInfoFrame", self)
-	PluginContainerFrame:SetAllPoints()
+-----------------------------------------------------------
+-- Utility Functions
+-----------------------------------------------------------
+-- Update our secret scanner tooltip with the current button
+local RefreshScanner = function(button)
+	local bag, slot = button:GetBag(), button:GetID()
+	if (ScannerTip.bag ~= bag) or (ScannerTip.slot ~= slot) then 
+		ScannerTip.owner = button
+		ScannerTip.bag = bag
+		ScannerTip.slot = slot
+		ScannerTip:SetOwner(button, "ANCHOR_NONE")
+		ScannerTip:SetBagItem(button:GetBag(), button:GetID())
+	end 
+end
 
-	-- Using standard blizzard fonts here
-	local ItemLevel = PluginContainerFrame:CreateFontString()
+-- Check if it's a caged battle pet
+local GetBattlePetInfo = function(itemLink)
+	if (string_find(itemLink, "battlepet")) then
+		local data, name = string_match(itemLink, "|H(.-)|h(.-)|h")
+		local  _, _, level, rarity = string_match(data, "(%w+):(%d+):(%d+):(%d+)")
+		return true, level or 1, tonumber(rarity) or 0
+	end
+end
+
+-----------------------------------------------------------
+-- Cache & Creation
+-----------------------------------------------------------
+-- Retrieve a button's plugin container
+local GetPluginContainter = function(button)
+	local name = button:GetName() .. "ExtraInfoFrame"
+	local frame = _G[name]
+	if (not frame) then 
+		frame = CreateFrame("Frame", name, button)
+		frame:SetAllPoints()
+	end 
+	return frame
+end
+
+local Cache_GetItemLevel = function(button)
+	local ItemLevel = GetPluginContainter(button):CreateFontString()
 	ItemLevel:SetDrawLayer("ARTWORK", 1)
 	ItemLevel:SetPoint("TOPLEFT", 2, -2)
-	ItemLevel:SetFontObject(NumberFont_Outline_Med) 
+	ItemLevel:SetFontObject(_G.NumberFont_Outline_Med or _G.NumberFontNormal) 
 	ItemLevel:SetShadowOffset(1, -1)
 	ItemLevel:SetShadowColor(0, 0, 0, .5)
 
 	-- Move Pawn out of the way
-	local UpgradeIcon = self.UpgradeIcon
+	local UpgradeIcon = button.UpgradeIcon
 	if UpgradeIcon then
 		UpgradeIcon:ClearAllPoints()
 		UpgradeIcon:SetPoint("BOTTOMRIGHT", 2, 0)
 	end
 
 	-- Store the reference for the next time
-	ButtonCache[self] = ItemLevel
+	Cache_ItemLevel[button] = ItemLevel
 
 	return ItemLevel
 end
 
--- Check if it's a caged battle pet
-local GetBattlePetInfo = function(itemLink)
-	if (not string_find(itemLink, "battlepet")) then
-		return
-	end
-	local data, name = string_match(itemLink, "|H(.-)|h(.-)|h")
-	local  _, _, level, rarity = string_match(data, "(%w+):(%d+):(%d+):(%d+)")
-	return true, level or 1, tonumber(rarity) or 0
-end
-
-local PostUpdateButton = function(self)
+-----------------------------------------------------------
+-- Main Update
+-----------------------------------------------------------
+local Update = function(self)
 	local itemLink = self:GetItem() 
 	if itemLink then
-
-		-- Retrieve or create this button's itemlevel text
-		local ItemLevel = ButtonCache[self] or CacheButton(self)
 
 		-- Get some blizzard info about the current item
 		local itemName, _itemLink, itemRarity, itemLevel, itemMinLevel, itemType, itemSubType, itemStackCount, itemEquipLoc, iconFileDataID, itemSellPrice, itemClassID, itemSubClassID, bindType, expacID, itemSetID, isCraftingReagent = GetItemInfo(itemLink)
@@ -85,11 +108,11 @@ local PostUpdateButton = function(self)
 		-- Retrieve the itemID from the itemLink
 		local itemID = tonumber(string_match(itemLink, "item:(%d+)"))
 
+		---------------------------------------------------
+		-- ItemLevel
+		---------------------------------------------------
 		if (itemEquipLoc == "INVTYPE_BAG") then 
-
-			ScannerTip.owner = self
-			ScannerTip:SetOwner(self, "ANCHOR_NONE")
-			ScannerTip:SetBagItem(self:GetBag(), self:GetID())
+			RefreshScanner(self)
 
 			local scannedSlots
 			local line = _G[ScannerTipName.."TextLeft3"]
@@ -115,12 +138,13 @@ local PostUpdateButton = function(self)
 			end
 
 			if scannedSlots then 
-				--local r, g, b = GetItemQualityColor(itemRarity)
-				local r, g, b = 240/255, 240/255, 240/255
-				ItemLevel:SetTextColor(r, g, b)
+				local ItemLevel = Cache_ItemLevel[self] or Cache_GetItemLevel(self)
+				ItemLevel:SetTextColor(240/255, 240/255, 240/255)
 				ItemLevel:SetText(scannedSlots)
 			else 
-				ItemLevel:SetText("")
+				if Cache_ItemLevel[self] then 
+					Cache_ItemLevel[self]:SetText("")
+				end
 			end 
 
 		-- Display item level of equippable gear and artifact relics
@@ -128,9 +152,7 @@ local PostUpdateButton = function(self)
 
 			local scannedLevel
 			if (not isBattlePet) then
-				ScannerTip.owner = self
-				ScannerTip:SetOwner(self, "ANCHOR_NONE")
-				ScannerTip:SetBagItem(self:GetBag(), self:GetID())
+				RefreshScanner(self)
 
 				local line = _G[ScannerTipName.."TextLeft2"]
 				if line then
@@ -157,20 +179,23 @@ local PostUpdateButton = function(self)
 			end
 
 			local r, g, b = GetItemQualityColor(battlePetRarity or itemRarity)
+			local ItemLevel = Cache_ItemLevel[self] or Cache_GetItemLevel(self)
 			ItemLevel:SetTextColor(r, g, b)
-			ItemLevel:SetText(scannedLevel or battlePetLevel or effectiveLevel or iLevel or "")
+			ItemLevel:SetText(scannedLevel or battlePetLevel or effectiveLevel or itemLevel or "")
 
 		else
-			ItemLevel:SetText("")
+			if Cache_ItemLevel[self] then 
+				Cache_ItemLevel[self]:SetText("")
+			end
 		end
 
 	else
-		if ButtonCache[self] then
-			ButtonCache[self]:SetText("")
+		if Cache_ItemLevel[self] then
+			Cache_ItemLevel[self]:SetText("")
 		end
 	end	
 end 
 
 Module.OnEnable = function(self)
-	hooksecurefunc(Bagnon.ItemSlot, "Update", PostUpdateButton)
+	hooksecurefunc(Bagnon.ItemSlot, "Update", Update)
 end 

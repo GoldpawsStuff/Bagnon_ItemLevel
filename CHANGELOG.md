@@ -4,6 +4,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/) 
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [1.0.21-Release] 2019-02-27
+### Changed
+- Update TOC metadata. 
+- Update README description and links.
+- Major code overhaul and optimization.
+- Added auto-disable if Bagnon ItemInfo is loaded. 
+
 ## [1.0.20-Release] 2019-01-15
 ### Changed
 - Updated TOC & links. 

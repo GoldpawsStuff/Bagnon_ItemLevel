@@ -1,15 +1,21 @@
-[ ![Support me on Patreon](http://i.imgur.com/kVU2d3f.png) ](https://www.patreon.com/goldpawsstuff)
+[ ![Becoma a Patreon](http://azerite.org/img/social-media-buttons-patreon-small.jpg) ](https://www.patreon.com/AzeriteUI) 
 
-This is a simple plugin for the addon [Bagnon](https://mods.curse.com/addons/wow/bagnon) that shows the item level of your equipable gear. 
+This is a simple plugin for the addon [Bagnon](https://mods.curse.com/addons/wow/bagnon) that shows the item level of your equipable gear, caged battle pet levels and number of container slots. 
 
-## Join the community
-* Discord: [Mqnrr8t](https://discord.gg/Mqnrr8t)
-* Facebook: [@cogwerkz](https://www.facebook.com/cogwerkz)
-* Twitter: [@CogwerkzUI](https://twitter.com/goldpawsstuff)
+If you're looking for something that displays both Item Level, BoE status and tones down garbage all at once, we recommend our all-in-one plugin [Bagnon ItemInfo](https://mods.curse.com/addons/wow/bagnon-iteminfo) to avoid having more button updates than needed. 
 
-## Support my work
-* PayPal Me: [www.paypal.me/goldpawsstuff](https://www.paypal.me/goldpawsstuff)
-* Patreon: [www.patreon.com/cogwerkz](https://www.patreon.com/cogwerkz)
+## **Pledge to our work:**  
+* Patreon: [www.patreon.com/AzeriteUI](https://www.patreon.com/azeriteui)  
+* PayPal: [www.paypal.me/AzeriteUI](https://www.paypal.me/azeriteui)  
 
-Regards
-Lars *"Goldpaw"* Norberg
+## **Follow AzeriteUI:**  
+* Discord: [discord.gg/MUSfWXd](https://discord.gg/MUSfWXd)  
+* Twitter: [@AzeriteUI](https://twitter.com/azeriteui)  
+* Instagram: [@AzeriteUI](https://instagram.com/azeriteui/)  
+* Facebook: [@AzeriteUI](https://www.facebook.com/azeriteui/)  
+* YouTube: [@AzeriteUI](https://www.youtube.com/azeriteui)  
+* Reddit: [@AzeriteUI](https://www.reddit.com/r/azeriteui/)  
+
+## **Follow the team:**
+* Twitter Blakmane: [@troko512](https://twitter.com/troko512)  
+* Twitter Goldpaw: [@GoldpawTheGreat](https://twitter.com/goldpawthegreat)  
