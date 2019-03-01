@@ -1,4 +1,4 @@
-[ ![Becoma a Patreon](http://azerite.org/img/social-media-buttons-patreon-small.jpg) ](https://www.patreon.com/AzeriteUI) 
+[ ![Become a Patreon](http://azerite.org/img/social-media-buttons-patreon-small.jpg) ](https://www.patreon.com/AzeriteUI) 
 
 This is a simple plugin for the addon [Bagnon](https://mods.curse.com/addons/wow/bagnon) that shows the item level of your equipable gear, caged battle pet levels and number of container slots. 
 
@@ -8,7 +8,7 @@ If you're looking for something that displays both the purple uncollected eye, i
 * Patreon: [www.patreon.com/AzeriteUI](https://www.patreon.com/azeriteui)  
 * PayPal: [www.paypal.me/AzeriteUI](https://www.paypal.me/azeriteui)  
 
-## **Follow AzeriteUI:**  
+## **Follow Azerite Team:**  
 * Discord: [discord.gg/MUSfWXd](https://discord.gg/MUSfWXd)  
 * Twitter: [@AzeriteUI](https://twitter.com/azeriteui)  
 * Instagram: [@AzeriteUI](https://instagram.com/azeriteui/)  
