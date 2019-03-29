@@ -1,6 +1,9 @@
 package-as: Bagnon_ItemLevel
 enable-nolib-creation: no
 
+move-folders:
+    Bagnon_ItemLevel/Bagnon_ItemLevel: Bagnon_ItemLevel
+
 manual-changelog:
     filename: CHANGELOG.md
     markup-type: markdown
@@ -9,5 +12,6 @@ license-output: LICENSE.txt
 
 ignore:
     - CHANGELOG.md
+    - CODE_OF_CONDUCT.md
     - README.md
     - LICENSE.md
