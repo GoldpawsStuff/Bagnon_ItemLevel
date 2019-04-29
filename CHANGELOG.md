@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/) 
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [1.0.24-Release] 2019-04-29
+### Fixed
+- Changed how bag slot count is captured to be compatible with deDE. 
+
 ## [1.0.23-Release] 2019-03-29
 ### Changed 
 - Updated addon detection to avoid messing with the addon loading order. 
