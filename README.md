@@ -16,7 +16,3 @@ If you're looking for something that displays both the purple uncollected eye, i
 * Facebook: [@AzeriteUI](https://www.facebook.com/azeriteui/)  
 * YouTube: [@AzeriteUI](https://www.youtube.com/azeriteui)  
 * Reddit: [@AzeriteUI](https://www.reddit.com/r/azeriteui/)  
-
-## **Follow the team:**
-* Twitter Blakmane: [@troko512](https://twitter.com/troko512)  
-* Twitter Goldpaw: [@GoldpawTheGreat](https://twitter.com/goldpawthegreat)  
