@@ -5,14 +5,6 @@
 ## RequiredDeps: Bagnon
 ## Version: 1.0
 ## X-Category: Inventory
-## X-Discord: https://discord.gg/MUSfWXd
-## X-Donate: https://www.paypal.me/azeriteui
-## X-Website: https://www.patreon.com/azeriteui
-## X-Facebook: https://www.facebook.com/azeriteui/
-## X-Instagram: https://instagram.com/azeriteui/
-## X-Reddit: https://www.reddit.com/r/azeriteui/
-## X-Twitter: https://twitter.com/azeriteui
-## X-YouTube: https://www.youtube.com/azeriteui
 ## X-License: The MIT License (MIT)
 
 main.lua

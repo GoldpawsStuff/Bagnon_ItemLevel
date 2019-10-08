@@ -4,6 +4,9 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/) 
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [1.0.27-Release] 2019-10-08
+- Fix toc links. 
+
 ## [1.0.26-Release] 2019-10-08
 - Bump to WoW Client patch 8.2.5.
 
