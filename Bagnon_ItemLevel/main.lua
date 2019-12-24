@@ -10,9 +10,9 @@ end)("Bagnon_ItemInfo") then
 	return 
 end 
 
-local MODULE =  ...
+local MODULE, Module =  ...
 local ADDON, Addon = MODULE:match("[^_]+"), _G[MODULE:match("[^_]+")]
-local Module = Bagnon:NewModule("ItemLevel", Addon)
+local ItemLevel = Addon:NewModule("ItemLevel", Module)
 
 -- Tooltip used for scanning
 local ScannerTip = _G.BagnonItemInfoScannerTooltip or CreateFrame("GameTooltip", "BagnonItemInfoScannerTooltip", WorldFrame, "GameTooltipTemplate")
@@ -207,5 +207,5 @@ local Update = function(self)
 end 
 
 Module.OnEnable = function(self)
-	hooksecurefunc(Bagnon.ItemSlot, "Update", Update)
+	hooksecurefunc(Bagnon.Item, "Update", Update)
 end 
