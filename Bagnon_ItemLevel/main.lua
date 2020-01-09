@@ -206,6 +206,4 @@ local Update = function(self)
 	end	
 end 
 
-Module.OnEnable = function(self)
-	hooksecurefunc(Bagnon.ItemSlot, "Update", Update)
-end 
+hooksecurefunc(Bagnon.ItemSlot, "Update", Update)
