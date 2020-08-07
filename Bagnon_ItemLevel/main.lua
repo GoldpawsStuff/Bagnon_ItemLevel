@@ -1,8 +1,11 @@
+if (not Bagnon) then
+	return
+end
 if (function(addon)
 	for i = 1,GetNumAddOns() do
 		if (string.lower((GetAddOnInfo(i))) == string.lower(addon)) then
 			if (GetAddOnEnableState(UnitName("player"), i) ~= 0) then
-				return 
+				return true
 			end
 		end
 	end
@@ -206,4 +209,7 @@ local Update = function(self)
 	end	
 end 
 
-hooksecurefunc(Bagnon.ItemSlot, "Update", Update)
+local item = Bagnon.ItemSlot or Bagnon.Item
+if (item) and (item.Update) then
+	hooksecurefunc(item, "Update", Update)
+end
