@@ -86,24 +86,25 @@ local GetPluginContainter = function(button)
 end
 
 local Cache_GetItemLevel = function(button)
-	local ItemLevel = GetPluginContainter(button):CreateFontString()
-	ItemLevel:SetDrawLayer("ARTWORK", 1)
-	ItemLevel:SetPoint("TOPLEFT", 2, -2)
-	ItemLevel:SetFontObject(_G.NumberFont_Outline_Med or _G.NumberFontNormal) 
-	ItemLevel:SetShadowOffset(1, -1)
-	ItemLevel:SetShadowColor(0, 0, 0, .5)
+	if (not Cache_ItemLevel[button]) then
+		local ItemLevel = GetPluginContainter(button):CreateFontString()
+		ItemLevel:SetDrawLayer("ARTWORK", 1)
+		ItemLevel:SetPoint("TOPLEFT", 2, -2)
+		ItemLevel:SetFontObject(_G.NumberFont_Outline_Med or _G.NumberFontNormal) 
+		ItemLevel:SetShadowOffset(1, -1)
+		ItemLevel:SetShadowColor(0, 0, 0, .5)
 
-	-- Move Pawn out of the way
-	local UpgradeIcon = button.UpgradeIcon
-	if UpgradeIcon then
-		UpgradeIcon:ClearAllPoints()
-		UpgradeIcon:SetPoint("BOTTOMRIGHT", 2, 0)
+		-- Move Pawn out of the way
+		local UpgradeIcon = button.UpgradeIcon
+		if UpgradeIcon then
+			UpgradeIcon:ClearAllPoints()
+			UpgradeIcon:SetPoint("BOTTOMRIGHT", 2, 0)
+		end
+
+		-- Store the reference for the next time
+		Cache_ItemLevel[button] = ItemLevel
 	end
-
-	-- Store the reference for the next time
-	Cache_ItemLevel[button] = ItemLevel
-
-	return ItemLevel
+	return Cache_ItemLevel[button]
 end
 
 -----------------------------------------------------------
