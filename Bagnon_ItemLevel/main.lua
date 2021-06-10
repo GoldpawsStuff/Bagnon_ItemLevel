@@ -126,7 +126,7 @@ local Update = function(self)
 			end
 
 		-- Display item level of equippable gear and artifact relics, and battle pet level
-		elseif ((itemRarity and (itemRarity > 0)) and ((itemEquipLoc and _G[itemEquipLoc]) or (itemID and IsArtifactRelicItem(itemID)))) or (isBattlePet) then
+		elseif ((itemRarity and (itemRarity > 0)) and ((itemEquipLoc and _G[itemEquipLoc]) or (itemID and IsArtifactRelicItem and IsArtifactRelicItem(itemID)))) or (isBattlePet) then
 
 			local scannedLevel
 			if (not isBattlePet) then
@@ -160,8 +160,12 @@ local Update = function(self)
 					end
 				end
 			end
+			--local bag,slot = self:GetBag(),self:GetID()
+			--local apiLevel = GetDetailedItemLevelInfo((GetContainerItemLink(bag,slot)))
+			local apiLevel = GetDetailedItemLevelInfo(itemLink)
+
 			displayR, displayG, displayB = GetItemQualityColor(battlePetRarity or itemRarity)
-			displayMsg = scannedLevel or battlePetLevel or GetDetailedItemLevelInfo(itemLink) or itemLevel or ""
+			displayMsg = apiLevel or scannedLevel or battlePetLevel or GetDetailedItemLevelInfo(itemLink) or itemLevel or ""
 		end
 	end
 
