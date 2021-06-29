@@ -4,6 +4,9 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/) 
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [1.0.38-Release] 2021-06-29
+- Bump toc for 9.1.0.
+
 ## [1.0.37-Release] 2021-06-10
 ### Changed
 - Updated to work for the BC and Classic versions of Bagnon!
