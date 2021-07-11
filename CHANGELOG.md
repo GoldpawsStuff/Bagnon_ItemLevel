@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/) 
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [1.0.39-Release] 2021-07-11
+### Changed
+- Reverting scanning order for item level to use the retrieved tooltip value first, as the API return value sometimes will be wrong for lower level items from leveling characters.
+
 ## [1.0.38-Release] 2021-06-29
 - Bump toc for 9.1.0.
 

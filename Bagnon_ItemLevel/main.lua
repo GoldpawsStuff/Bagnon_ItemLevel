@@ -160,12 +160,8 @@ local Update = function(self)
 					end
 				end
 			end
-			--local bag,slot = self:GetBag(),self:GetID()
-			--local apiLevel = GetDetailedItemLevelInfo((GetContainerItemLink(bag,slot)))
-			local apiLevel = GetDetailedItemLevelInfo(itemLink)
-
 			displayR, displayG, displayB = GetItemQualityColor(battlePetRarity or itemRarity)
-			displayMsg = apiLevel or scannedLevel or battlePetLevel or GetDetailedItemLevelInfo(itemLink) or itemLevel or ""
+			displayMsg = scannedLevel or battlePetLevel or GetDetailedItemLevelInfo(itemLink) or itemLevel or ""
 		end
 	end
 
