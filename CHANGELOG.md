@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/) 
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [1.0.41-Release] 2021-09-28
+### Changed
+- Update auto-disable logic.
+
 ## [1.0.40-Release] 2021-09-01
 - Bump TOC for BCC 2.5.2.
 

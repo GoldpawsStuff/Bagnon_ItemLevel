@@ -3,8 +3,10 @@ if (not Bagnon) then
 end
 if (function(addon)
 	for i = 1,GetNumAddOns() do
-		if (string.lower((GetAddOnInfo(i))) == string.lower(addon)) then
-			if (GetAddOnEnableState(UnitName("player"), i) ~= 0) then
+		local name, title, notes, loadable, reason, security, newVersion = GetAddOnInfo(i)
+		if (name:lower() == addon:lower()) then
+			local enabled = not(GetAddOnEnableState(UnitName("player"), i) == 0) 
+			if (enabled and loadable) then
 				return true
 			end
 		end
