@@ -4,6 +4,9 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/) 
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [1.0.42-Release] 2021-10-18
+- Bump Classic Era toc to client patch 1.14.
+
 ## [1.0.41-Release] 2021-09-28
 ### Changed
 - Update auto-disable logic.
