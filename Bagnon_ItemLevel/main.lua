@@ -12,6 +12,7 @@ if (function(addon)
 		end
 	end
 end)("Bagnon_ItemInfo") then 
+	print("|cffff1111"..(...).." was auto-disabled.")
 	return 
 end 
 
@@ -28,7 +29,10 @@ local _G = _G
 local select = select
 local string_find = string.find
 local string_gsub = string.gsub
+local string_lower = string.lower
 local string_match = string.match
+local string_split = string.split
+local string_upper = string.upper
 local tonumber = tonumber
 
 -- WoW API
@@ -48,6 +52,57 @@ local S_CONTAINER_SLOTS = "^" .. (string.gsub(string.gsub(CONTAINER_SLOTS, "%%([
 
 -- FontString Caches
 local Cache_ItemLevel = {}
+
+
+-----------------------------------------------------------
+-- Slash Command & Options Handling
+-----------------------------------------------------------
+do
+	-- Saved settings
+	BagnonItemLevel_DB = {
+		enableRarityColoring = true
+	}
+
+	local slashCommand = function(msg, editBox)
+		local action, element
+
+		-- Remove spaces at the start and end
+		msg = string_gsub(msg, "^%s+", "")
+		msg = string_gsub(msg, "%s+$", "")
+
+		-- Replace all space characters with single spaces
+		msg = string_gsub(msg, "%s+", " ") 
+
+		-- Extract the arguments 
+		if string_find(msg, "%s") then
+			action, element = string_split(" ", msg) 
+		else
+			action = msg
+		end
+
+		if (action == "enable") then 
+			if (element == "color") then 
+				BagnonItemLevel_DB.enableRarityColoring = true
+			end
+
+		elseif (action == "disable") then 
+			if (element == "color") then 
+				BagnonItemLevel_DB.enableRarityColoring = false
+			end
+		end
+	end
+
+	-- Create a unique name for the command
+	local commands = { "bagnonitemlevel", "bilvl", "bil" }
+	for i = 1,#commands do 
+		-- Register the chat command, keep hash upper case, value lowercase
+		local command = commands[i]
+		local name = "AZERITE_TEAM_PLUGIN_"..string_upper(command) 
+		_G["SLASH_"..name.."1"] = "/"..string_lower(command)
+		_G.SlashCmdList[name] = slashCommand
+	end
+end
+
 
 -----------------------------------------------------------
 -- Cache & Creation
@@ -169,7 +224,7 @@ local Update = function(self)
 
 	if (displayMsg) then
 		local ItemLevel = Cache_ItemLevel[self] or Cache_GetItemLevel(self)
-		if (displayR) and (displayG) and (displayB) then
+		if (BagnonItemLevel_DB.enableRarityColoring) and (displayR) and (displayG) and (displayB) then
 			ItemLevel:SetTextColor(displayR, displayG, displayB)
 		else
 			ItemLevel:SetTextColor(240/255, 240/255, 240/255)

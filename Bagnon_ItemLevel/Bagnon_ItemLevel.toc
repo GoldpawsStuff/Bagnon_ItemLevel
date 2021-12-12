@@ -14,5 +14,6 @@
 ## X-License: Custom
 
 ## RequiredDeps: Bagnon
+## SavedVariables: BagnonItemLevel_DB
 
 main.lua
