@@ -3,18 +3,18 @@ if (not Bagnon) then
 end
 if (function(addon)
 	for i = 1,GetNumAddOns() do
-		local name, title, notes, loadable, reason, security, newVersion = GetAddOnInfo(i)
+		local name, _, _, loadable = GetAddOnInfo(i)
 		if (name:lower() == addon:lower()) then
-			local enabled = not(GetAddOnEnableState(UnitName("player"), i) == 0) 
+			local enabled = not(GetAddOnEnableState(UnitName("player"), i) == 0)
 			if (enabled and loadable) then
 				return true
 			end
 		end
 	end
-end)("Bagnon_ItemInfo") then 
+end)("Bagnon_ItemInfo") then
 	print("|cffff1111"..(...).." was auto-disabled.")
-	return 
-end 
+	return
+end
 
 local MODULE =  ...
 local ADDON, Addon = MODULE:match("[^_]+"), _G[MODULE:match("[^_]+")]
@@ -40,15 +40,15 @@ local CreateFrame = _G.CreateFrame
 local GetDetailedItemLevelInfo = _G.GetDetailedItemLevelInfo
 local GetItemInfo = _G.GetItemInfo
 local GetItemQualityColor = _G.GetItemQualityColor
-local IsArtifactRelicItem = _G.IsArtifactRelicItem 
+local IsArtifactRelicItem = _G.IsArtifactRelicItem
 
 -- Tooltip and scanning by Phanx @ http://www.wowinterface.com/forums/showthread.php?p=271406
 local S_ITEM_LEVEL = "^" .. string_gsub(_G.ITEM_LEVEL, "%%d", "(%%d+)")
 
--- Redoing this to take other locales into consideration, 
--- and to make sure we're capturing the slot count, and not the bag type. 
+-- Redoing this to take other locales into consideration,
+-- and to make sure we're capturing the slot count, and not the bag type.
+local S_CONTAINER_SLOTS = "^" .. (string_gsub(string_gsub(CONTAINER_SLOTS, "%%([%d%$]-)d", "(%%d+)"), "%%([%d%$]-)s", "%.+"))
 --local S_CONTAINER_SLOTS = "^" .. string_gsub(string_gsub(_G.CONTAINER_SLOTS, "%%d", "(%%d+)"), "%%s", "(%.+)")
-local S_CONTAINER_SLOTS = "^" .. (string.gsub(string.gsub(CONTAINER_SLOTS, "%%([%d%$]-)d", "(%%d+)"), "%%([%d%$]-)s", "%.+"))
 
 -- FontString Caches
 local Cache_ItemLevel = {}
@@ -71,22 +71,22 @@ do
 		msg = string_gsub(msg, "%s+$", "")
 
 		-- Replace all space characters with single spaces
-		msg = string_gsub(msg, "%s+", " ") 
+		msg = string_gsub(msg, "%s+", " ")
 
-		-- Extract the arguments 
+		-- Extract the arguments
 		if string_find(msg, "%s") then
-			action, element = string_split(" ", msg) 
+			action, element = string_split(" ", msg)
 		else
 			action = msg
 		end
 
-		if (action == "enable") then 
-			if (element == "color") then 
+		if (action == "enable") then
+			if (element == "color") then
 				BagnonItemLevel_DB.enableRarityColoring = true
 			end
 
-		elseif (action == "disable") then 
-			if (element == "color") then 
+		elseif (action == "disable") then
+			if (element == "color") then
 				BagnonItemLevel_DB.enableRarityColoring = false
 			end
 		end
@@ -94,10 +94,10 @@ do
 
 	-- Create a unique name for the command
 	local commands = { "bagnonitemlevel", "bilvl", "bil" }
-	for i = 1,#commands do 
+	for i = 1,#commands do
 		-- Register the chat command, keep hash upper case, value lowercase
 		local command = commands[i]
-		local name = "AZERITE_TEAM_PLUGIN_"..string_upper(command) 
+		local name = "AZERITE_TEAM_PLUGIN_"..string_upper(command)
 		_G["SLASH_"..name.."1"] = "/"..string_lower(command)
 		_G.SlashCmdList[name] = slashCommand
 	end
@@ -111,10 +111,10 @@ end
 local GetPluginContainter = function(button)
 	local name = button:GetName() .. "ExtraInfoFrame"
 	local frame = _G[name]
-	if (not frame) then 
+	if (not frame) then
 		frame = CreateFrame("Frame", name, button)
 		frame:SetAllPoints()
-	end 
+	end
 	return frame
 end
 
@@ -123,7 +123,7 @@ local Cache_GetItemLevel = function(button)
 		local ItemLevel = GetPluginContainter(button):CreateFontString()
 		ItemLevel:SetDrawLayer("ARTWORK", 1)
 		ItemLevel:SetPoint("TOPLEFT", 2, -2)
-		ItemLevel:SetFontObject(_G.NumberFont_Outline_Med or _G.NumberFontNormal) 
+		ItemLevel:SetFontObject(_G.NumberFont_Outline_Med or _G.NumberFontNormal)
 		ItemLevel:SetShadowOffset(1, -1)
 		ItemLevel:SetShadowColor(0, 0, 0, .5)
 		local UpgradeIcon = button.UpgradeIcon
@@ -141,9 +141,9 @@ end
 -----------------------------------------------------------
 local Update = function(self)
 	local displayMsg, displayR, displayG, displayB
-	local itemLink = self:GetItem() 
+	local itemLink = self:GetItem()
 	if (itemLink) then
-		local itemName, _itemLink, itemRarity, itemLevel, itemMinLevel, itemType, itemSubType, itemStackCount, itemEquipLoc, iconFileDataID, itemSellPrice, itemClassID, itemSubClassID, bindType, expacID, itemSetID, isCraftingReagent = GetItemInfo(itemLink)
+		local _, _, itemRarity, itemLevel, _, _, _, _, itemEquipLoc = GetItemInfo(itemLink)
 		local isBattlePet, battlePetLevel, battlePetRarity
 		if (string_find(itemLink, "battlepet")) then
 			local data, name = string_match(itemLink, "|H(.-)|h(.-)|h")
@@ -152,7 +152,9 @@ local Update = function(self)
 		end
 		local itemID = tonumber(string_match(itemLink, "item:(%d+)"))
 
-		if (itemEquipLoc == "INVTYPE_BAG") then 
+		-- Display container slots
+		-- of equipped bags.
+		if (itemEquipLoc == "INVTYPE_BAG") then
 			local bag,slot = self:GetBag(),self:GetID()
 			ScannerTip.owner = self
 			ScannerTip.bag = bag
@@ -160,30 +162,23 @@ local Update = function(self)
 			ScannerTip:SetOwner(self, "ANCHOR_NONE")
 			ScannerTip:SetBagItem(bag,slot)
 
-			local line = _G[ScannerTipName.."TextLeft3"]
-			if (line) then
-				local msg = line:GetText()
-				if (msg) and (string_find(msg, S_CONTAINER_SLOTS)) then
-					local bagSlots = string_match(msg, S_CONTAINER_SLOTS)
-					if (bagSlots) and (tonumber(bagSlots) > 0) then
-						displayMsg = bagSlots
-					end
-				else
-					line = _G[ScannerTipName.."TextLeft4"]
-					if (line) then
-						local msg = line:GetText()
-						if (msg) and (string_find(msg, S_CONTAINER_SLOTS)) then
-							local bagSlots = string_match(msg, S_CONTAINER_SLOTS)
-							if (bagSlots) and (tonumber(bagSlots) > 0) then
-								displayMsg = bagSlots
-							end
+			for i = 3,4 do
+				local line = _G[ScannerTipName.."TextLeft"..i]
+				if (line) then
+					local msg = line:GetText()
+					if (msg) and (string_find(msg, S_CONTAINER_SLOTS)) then
+						local bagSlots = string_match(msg, S_CONTAINER_SLOTS)
+						if (bagSlots) and (tonumber(bagSlots) > 0) then
+							displayMsg = bagSlots
 						end
+						break
 					end
 				end
 			end
 
-		-- Display item level of equippable gear and artifact relics, and battle pet level
-		elseif ((itemRarity and (itemRarity > 0)) and ((itemEquipLoc and _G[itemEquipLoc]) or (itemID and IsArtifactRelicItem and IsArtifactRelicItem(itemID)))) or (isBattlePet) then
+		-- Display item level of equippable gear,
+		-- artifact relics, and battle pet level.
+		elseif ((itemRarity and itemRarity > 0) and ((itemEquipLoc and _G[itemEquipLoc]) or (itemID and IsArtifactRelicItem and IsArtifactRelicItem(itemID)))) or (isBattlePet) then
 
 			local scannedLevel
 			if (not isBattlePet) then
@@ -193,30 +188,24 @@ local Update = function(self)
 				ScannerTip.slot = slot
 				ScannerTip:SetOwner(self, "ANCHOR_NONE")
 				ScannerTip:SetBagItem(bag,slot)
-	
-				local line = _G[ScannerTipName.."TextLeft2"]
-				if (line) then
-					local msg = line:GetText()
-					if (msg) and (string_find(msg, S_ITEM_LEVEL)) then
-						local ilvl = (string_match(msg, S_ITEM_LEVEL))
-						if (ilvl) and (tonumber(ilvl) > 0) then
-							scannedLevel = ilvl
-						end
-					else
-						-- Check line 3, some artifacts have the ilevel there
-						line = _G[ScannerTipName.."TextLeft3"]
-						if line then
-							local msg = line:GetText()
-							if (msg) and (string_find(msg, S_ITEM_LEVEL)) then
-								local ilvl = (string_match(msg, S_ITEM_LEVEL))
-								if (ilvl) and (tonumber(ilvl) > 0) then
-									scannedLevel = ilvl
-								end
+
+				-- Check line 3 as well,
+				-- some artifacts have the ilevel there.
+				for i = 2,3 do
+					local line = _G[ScannerTipName.."TextLeft"..i]
+					if (line) then
+						local msg = line:GetText()
+						if (msg) and (string_find(msg, S_ITEM_LEVEL)) then
+							local ilvl = (string_match(msg, S_ITEM_LEVEL))
+							if (ilvl) and (tonumber(ilvl) > 0) then
+								scannedLevel = ilvl
 							end
+							break
 						end
 					end
 				end
 			end
+
 			displayR, displayG, displayB = GetItemQualityColor(battlePetRarity or itemRarity)
 			displayMsg = scannedLevel or battlePetLevel or GetDetailedItemLevelInfo(itemLink) or itemLevel or ""
 		end
@@ -233,7 +222,7 @@ local Update = function(self)
 	elseif (Cache_ItemLevel[self]) then
 		Cache_ItemLevel[self]:SetText("")
 	end
-end 
+end
 
 local item = Bagnon.ItemSlot or Bagnon.Item
 if (item) and (item.Update) then
