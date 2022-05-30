@@ -166,7 +166,7 @@ local Update = function(self)
 			end
 
 			if (BagnonItemLevel_DB.enableRarityColoring) then
-				local col = color[petRarity or itemRarity]
+				local col = colors[petRarity or itemRarity]
 				if (col) then
 					r, g, b = col[1], col[2], col[3]
 				end
