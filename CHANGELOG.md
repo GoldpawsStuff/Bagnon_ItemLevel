@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [1.0.50-Release] 2022-05-30
+### Changed
+- More code tweaks and performance upgrades.
+
 ## [1.0.49-Release] 2022-05-11
 ### Changed
 - Minor code tweaks.
