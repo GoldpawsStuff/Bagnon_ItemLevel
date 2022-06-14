@@ -39,7 +39,6 @@ local tonumber = tonumber
 local CreateFrame = _G.CreateFrame
 local GetDetailedItemLevelInfo = _G.GetDetailedItemLevelInfo
 local GetItemInfo = _G.GetItemInfo
-local GetItemQualityColor = _G.GetItemQualityColor
 local IsArtifactRelicItem = _G.IsArtifactRelicItem
 
 -- Tooltip and scanning by Phanx
