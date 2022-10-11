@@ -4,11 +4,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [Unreleased] 2022-10-11
+### Changed
+- Full performance rewrite to take much better advantage of Bagnon and Wildpant's APIs.
+
 ## [1.0.56-Release] 2022-08-17
 - Bump to client patch 9.2.7.
 
 ## [1.0.55-Release] 2022-07-21
-- Add support for WotLK Classic beta.
+- Add support for Wrath Classic.
 
 ## [1.0.54-Release] 2022-07-09
 - Bump for Classic Era client patch 1.14.3.
