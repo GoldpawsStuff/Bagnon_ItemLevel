@@ -2,19 +2,17 @@ if (not Bagnon) then
 	return
 end
 
-if (function(addon)
-	for i = 1,GetNumAddOns() do
-		local name, _, _, loadable = GetAddOnInfo(i)
-		if (name:lower() == addon:lower()) then
-			local enabled = not(GetAddOnEnableState(UnitName("player"), i) == 0)
-			if (enabled and loadable) then
-				return true
-			end
+local PLAYER_NAME = UnitName("player")
+for i = 1,GetNumAddOns() do
+	local name, _, _, loadable = GetAddOnInfo(i)
+	if (name == "Bagnon_ItemInfo") then
+		if (loadable and not(GetAddOnEnableState(PLAYER_NAME, i) == 0)) then
+			print("|cffff1111"..(...).." was auto-disabled.")
+			return
+		else
+			break
 		end
 	end
-end)("Bagnon_ItemInfo") then
-	print("|cffff1111"..(...).." was auto-disabled.")
-	return
 end
 
 local MODULE =  ...
@@ -155,6 +153,12 @@ local update = function(self)
 
 end
 
+local forceupdate = function()
+	for item in next,cache do
+		update(item)
+	end
+end
+
 local updates = BAGNON_ITEMINFO_UPDATES or {}
 BAGNON_ITEMINFO_UPDATES = updates
 
@@ -181,12 +185,12 @@ SlashCmdList["BAGNON_ITEMLEVEL"] = function(msg)
 	msg = string.gsub(msg, "%s+", " ")
 
 	local action, element = string.split(" ", msg)
+	local db = BagnonItemLevel_DB
 
 	if (element == "color") then
-		if (action == "enable") then
-			BagnonItemLevel_DB.enableRarityColoring = true
-		elseif (action == "disable") then
-			BagnonItemLevel_DB.enableRarityColoring = false
+		if (action == "enable" and not db.enableRarityColoring) or (action == "disable" and db.enableRarityColoring) then
+			db.enableRarityColoring = not db.enableRarityColoring
+			forceupdate()
 		end
 	end
 end
