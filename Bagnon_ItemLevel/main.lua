@@ -1,39 +1,55 @@
-if (not Bagnon) then
+--[[
+
+	The MIT License (MIT)
+
+	Copyright (c) 2022 Lars Norberg
+
+	Permission is hereby granted, free of charge, to any person obtaining a copy
+	of this software and associated documentation files (the "Software"), to deal
+	in the Software without restriction, including without limitation the rights
+	to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+	copies of the Software, and to permit persons to whom the Software is
+	furnished to do so, subject to the following conditions:
+
+	The above copyright notice and this permission notice shall be included in all
+	copies or substantial portions of the Software.
+
+	THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+	IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+	FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+	AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+	LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+	OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+	SOFTWARE.
+
+--]]
+local Addon, Private =  ...
+if (Private.Incompatible) then
 	return
 end
 
-local PLAYER_NAME = UnitName("player")
-for i = 1,GetNumAddOns() do
-	local name, _, _, loadable = GetAddOnInfo(i)
-	if (name == "Bagnon_ItemInfo") then
-		if (loadable and not(GetAddOnEnableState(PLAYER_NAME, i) == 0)) then
-			print("|cffff1111"..(...).." was auto-disabled.")
-			return
-		else
-			break
-		end
-	end
-end
+local Module = Bagnon:NewModule(Addon, Private)
 
-local MODULE =  ...
-local ADDON, Addon = MODULE:match("[^_]+"), _G[MODULE:match("[^_]+")]
-local Module = Bagnon:NewModule("ItemLevel", Addon)
-
-BagnonItemLevel_DB = {
-	enableRarityColoring = true
-}
-
+-- Speed!
 local _G = _G
 local string_match = string.match
 local tonumber = tonumber
 
-local CONTAINER_SLOTS = "^" .. (string.gsub(string.gsub(CONTAINER_SLOTS, "%%([%d%$]-)d", "(%%d+)"), "%%([%d%$]-)s", "%.+"))
-local ITEM_LEVEL = "^" .. string.gsub(ITEM_LEVEL, "%%d", "(%%d+)")
-local FONT = NumberFont_Outline_Med or NumberFontNormal
-local TIP_NAME = "BagnonItemInfoScannerTooltip"
-local TIP = _G[TIP_NAME] or CreateFrame("GameTooltip", TIP_NAME, WorldFrame, "GameTooltipTemplate")
+local retail = Private.IsRetail
+local cache = Private.cache
+local tooltip = Private.tooltip
+local tooltipName = Private.tooltipName
+local battlepetclass = Enum.ItemClass.Battlepet
 
-local cache = {}
+-- Font object
+local font_object = NumberFont_Outline_Med or NumberFontNormal
+
+-- Search patterns
+local s_item_level = "^" .. string.gsub(ITEM_LEVEL, "%%d", "(%%d+)")
+local s_num_slots = "^" .. (string.gsub(string.gsub(CONTAINER_SLOTS, "%%([%d%$]-)d", "(%%d+)"), "%%([%d%$]-)s", "%.+"))
+
+-- Custom color cache
+-- Allows us control, gives us speed.
 local colors = {
 	[0] = { 157/255, 157/255, 157/255 }, -- Poor
 	[1] = { 240/255, 240/255, 240/255 }, -- Common
@@ -46,39 +62,43 @@ local colors = {
 	[8] = { 79/255, 196/255, 225/255 } -- Blizzard
 }
 
-local update = function(self)
+Module:AddUpdater(function(self)
 
 	local message, color
 
 	if (self.hasItem) then -- and self.info.link
 
+		-- https://wowpedia.fandom.com/wiki/Enum.InventoryType
 		local class, equip, level, quality = self.info.class, self.info.equip, self.info.level, self.info.quality
 		local noequip = not equip or equip == "INVTYPE_BAG" or equip == "INVTYPE_NON_EQUIP" or equip == "INVTYPE_TABARD" or equip == "INVTYPE_AMMO" or equip == "INVTYPE_QUIVER" or equip == "INVTYPE_BODY"
 		local isbag = equip == "INVTYPE_BAG"
 		local isgear = quality and not noequip
-		local ispet = class == Enum.ItemClass.Battlepet
+		local ispet = battlepetclass and class == battlepetclass
 
+		-- We only want quality coloring on item- and pet levels, not bag slots.
 		if (isgear or ispet) and (BagnonItemLevel_DB.enableRarityColoring) then
 			color = quality and colors[quality]
 			message = level
 		end
 
-		if (isgear or isbag) then
+		-- Only retail tooltips contain iteminfo,
+		-- but only retail tooltips need it.
+		if (isgear and retail) or (isbag) then
 
-			if (not TIP.owner or not TIP.bag or not TIP.slot) then
-				TIP.owner, TIP.bag,TIP.slot = self, self.bag, self:GetID()
-				TIP:SetOwner(TIP.owner, "ANCHOR_NONE")
-				TIP:SetBagItem(TIP.bag, TIP.bag)
+			if (not tooltip.owner or not tooltip.bag or not tooltip.slot) then
+				tooltip.owner, tooltip.bag,tooltip.slot = self, self.bag, self:GetID()
+				tooltip:SetOwner(tooltip.owner, "ANCHOR_NONE")
+				tooltip:SetBagItem(tooltip.bag, tooltip.bag)
 			end
 
 			if (isgear) then
 				for i = 2,3 do
-					local line = _G[TIP_NAME.."TextLeft"..i]
+					local line = _G[tooltipName.."TextLeft"..i]
 					if (not line) then
 						break
 					end
 
-					local itemlevel = string_match(line:GetText() or "", ITEM_LEVEL)
+					local itemlevel = string_match(line:GetText() or "", s_item_level)
 					if (itemlevel) then
 						itemlevel = tonumber(itemlevel)
 						if (itemlevel > 0) then
@@ -91,12 +111,12 @@ local update = function(self)
 
 			if (isbag) then
 				for i = 3,4 do
-					local line = _G[TIP_NAME.."TextLeft"..i]
+					local line = _G[tooltipName.."TextLeft"..i]
 					if (not line) then
 						break
 					end
 
-					local numslots = string_match(line:GetText() or "", CONTAINER_SLOTS)
+					local numslots = string_match(line:GetText() or "", s_num_slots)
 					if (numslots) then
 						numslots = tonumber(numslots)
 						if (numslots > 0) then
@@ -126,7 +146,7 @@ local update = function(self)
 			label = container:CreateFontString()
 			label:SetDrawLayer("ARTWORK", 1)
 			label:SetPoint("TOPLEFT", 2, -2)
-			label:SetFontObject(FONT)
+			label:SetFontObject(font_object)
 			label:SetShadowOffset(1, -1)
 			label:SetShadowColor(0, 0, 0, .5)
 
@@ -151,46 +171,4 @@ local update = function(self)
 		cache[self]:SetText("")
 	end
 
-end
-
-local forceupdate = function()
-	for item in next,cache do
-		update(item)
-	end
-end
-
-local updates = BAGNON_ITEMINFO_UPDATES or {}
-BAGNON_ITEMINFO_UPDATES = updates
-
-table.insert(updates, update)
-
-if (not BAGNON_ITEMINFO_DISPATCHER) then
-	BAGNON_ITEMINFO_DISPATCHER = function(self)
-		for _,update in ipairs(updates) do
-			update(self)
-		end
-		TIP.owner, TIP.bag, TIP.slot = nil, nil, nil
-	end
-	hooksecurefunc(Bagnon.ItemSlot or Bagnon.Item, "Update", BAGNON_ITEMINFO_DISPATCHER)
-end
-
-SLASH_BAGNON_ITEMLEVEL1 = "/bil"
-SlashCmdList["BAGNON_ITEMLEVEL"] = function(msg)
-	if (not msg) then
-		return
-	end
-
-	msg = string.gsub(msg, "^%s+", "")
-	msg = string.gsub(msg, "%s+$", "")
-	msg = string.gsub(msg, "%s+", " ")
-
-	local action, element = string.split(" ", msg)
-	local db = BagnonItemLevel_DB
-
-	if (element == "color") then
-		if (action == "enable" and not db.enableRarityColoring) or (action == "disable" and db.enableRarityColoring) then
-			db.enableRarityColoring = not db.enableRarityColoring
-			forceupdate()
-		end
-	end
-end
+end)
