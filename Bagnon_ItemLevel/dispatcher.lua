@@ -40,7 +40,7 @@ Private.cache = {}
 
 Private.updates = BAGNON_ITEMINFO_UPDATES or {}
 Private.updatesByModule = BAGNON_ITEMINFO_UPDATES_BY_MODULE or {}
-Private.tooltip = BAGNON_ITEMINFO_SCANNERTOOLTIP or CreateFrame("GameTooltip", Private.tooltipName, WorldFrame, "GameTooltipTemplate")
+Private.tooltip = BAGNON_ITEMINFO_SCANNERTOOLTIP or CreateFrame("GameTooltip", "BAGNON_ITEMINFO_SCANNERTOOLTIP", WorldFrame, "GameTooltipTemplate")
 Private.tooltipName = Private.tooltip:GetName()
 
 Private.ClientMajor = tonumber((string.split(".", (GetBuildInfo()))))

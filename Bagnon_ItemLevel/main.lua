@@ -25,6 +25,7 @@
 --]]
 local Addon, Private =  ...
 if (Private.Incompatible) then
+	print("|cffff1111"..Addon.." was auto-disabled.")
 	return
 end
 
@@ -66,7 +67,7 @@ Module:AddUpdater(function(self)
 
 	local message, color
 
-	if (self.hasItem) then -- and self.info.link
+	if (self.hasItem) then
 
 		-- https://wowpedia.fandom.com/wiki/Enum.InventoryType
 		local class, equip, level, quality = self.info.class, self.info.equip, self.info.level, self.info.quality
@@ -136,6 +137,7 @@ Module:AddUpdater(function(self)
 		local label = cache[self]
 		if (not label) then
 
+			-- Only one container per item.
 			local name = self:GetName().."ExtraInfoFrame"
 			local container = _G[name]
 			if (not container) then
@@ -143,18 +145,20 @@ Module:AddUpdater(function(self)
 				container:SetAllPoints()
 			end
 
+			-- Always move this to the same place.
+			local upgrade = self.UpgradeIcon
+			if (upgrade) then
+				upgrade:ClearAllPoints()
+				upgrade:SetPoint("BOTTOMRIGHT", 2, 0)
+			end
+
+			-- This is specific to this plugin.
 			label = container:CreateFontString()
 			label:SetDrawLayer("ARTWORK", 1)
 			label:SetPoint("TOPLEFT", 2, -2)
 			label:SetFontObject(font_object)
 			label:SetShadowOffset(1, -1)
 			label:SetShadowColor(0, 0, 0, .5)
-
-			local upgrade = self.UpgradeIcon
-			if (upgrade) then
-				upgrade:ClearAllPoints()
-				upgrade:SetPoint("BOTTOMRIGHT", 2, 0)
-			end
 
 			cache[self] = label
 		end
