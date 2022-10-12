@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## [2.0.57-RC] 2022-10-12
+## [2.0.58-RC] 2022-10-12
 - Full performance rewrite to take much better advantage of Bagnon and Wildpant's APIs.
 
 ## [1.0.56-Release] 2022-08-17
