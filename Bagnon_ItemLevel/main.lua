@@ -101,7 +101,7 @@ Module:AddUpdater(function(self)
 
 				if (isgear) then
 					for i = 2,3 do
-						local msg = tooltipData.lines[i].leftText
+						local msg = tooltipData.lines[i] and tooltipData.lines[i].leftText
 						if (not msg) then break end
 
 						local itemlevel = string_match(msg, s_item_level)
@@ -117,7 +117,7 @@ Module:AddUpdater(function(self)
 
 				if (isbag) then
 					for i = 3,4 do
-						local msg = tooltipData.lines[i].leftText
+						local msg = tooltipData.lines[i] and tooltipData.lines[i].leftText
 						if (not msg) then break end
 
 						local numslots = string_match(msg, s_num_slots)
