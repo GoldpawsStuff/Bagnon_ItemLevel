@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [2.0.68-Release] 2023-02-28
+### Changed
+- Added fallback colors.
+
 ## [2.0.67-Release] 2023-01-26
 - Updated for WoW 10.0.5.
 
