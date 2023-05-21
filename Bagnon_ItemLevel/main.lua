@@ -70,7 +70,6 @@ for i = 0, (retail and Enum.ItemQualityMeta.NumValues or NUM_LE_ITEM_QUALITYS) -
 	end
 end
 
-
 Module:AddUpdater(function(self)
 
 	local message, color, _
