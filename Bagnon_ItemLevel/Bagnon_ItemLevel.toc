@@ -12,9 +12,11 @@
 ## X-Wago-ID: J96Eg8Gg
 ## X-License: Custom
 
+## OptionalDeps: TaintLess
 ## RequiredDeps: Bagnon
 ## SavedVariables: BagnonItemLevel_DB
 
+embeds.xml
 dispatcher.lua
 defaults.lua
 main.lua
