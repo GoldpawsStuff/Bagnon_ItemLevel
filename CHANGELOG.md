@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [2.0.92-Release] 2024-04-17
+### Changed
+- Only item levels above 1 will now be shown, removing a lot of low level and vanity item spam. To adjust this value, install Bagnon Itemlevel Plus instead.
+
 ## [2.0.91-Release] 2024-04-03
 - Updated for WoW Client Patch 1.15.2.
 

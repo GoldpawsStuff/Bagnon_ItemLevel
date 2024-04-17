@@ -179,7 +179,7 @@ Module:AddUpdater(function(self)
 		end
 	end
 
-	if (message) then
+	if (message and message > 1) then
 
 		local label = cache[self]
 		if (not label) then
