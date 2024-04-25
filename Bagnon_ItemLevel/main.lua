@@ -90,7 +90,7 @@ Module:AddUpdater(function(self)
 		if (not equip and self.info.hyperlink) then
 			_,_,_,equip = GetItemInfoInstant(self.info.hyperlink)
 		end
-		local noequip = not equip or not _G[equip] or quip == "INVTYPE_BAG" or equip == "INVTYPE_NON_EQUIP" or equip == "INVTYPE_NON_EQUIP_IGNORE" or equip == "INVTYPE_TABARD" or equip == "INVTYPE_AMMO" or equip == "INVTYPE_QUIVER" or equip == "INVTYPE_BODY"
+		local noequip = not equip or not _G[equip] or equip == "INVTYPE_BAG" or equip == "INVTYPE_NON_EQUIP" or equip == "INVTYPE_NON_EQUIP_IGNORE" or equip == "INVTYPE_TABARD" or equip == "INVTYPE_AMMO" or equip == "INVTYPE_QUIVER" or equip == "INVTYPE_BODY"
 		local isbag = equip == "INVTYPE_BAG"
 		local isgear = quality and quality > 0 and not noequip
 		local ispet = battlepetclass and class == battlepetclass
