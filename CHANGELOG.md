@@ -4,6 +4,9 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [2.0.94-Release] 2024-04-03
+- Updated for WoW Retail Client Patch 10.2.7.
+
 ## [2.0.93-Release] 2024-04-25
 ### Fixed
 - Fixed a non-breaking typo in the code that compared a non-existing global instead of a local value to a string.
