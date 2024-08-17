@@ -24,6 +24,12 @@
 
 --]]
 local _, Private =  ...
+
+-- WoW 11.0.x
+local GetAddOnEnableState = GetAddOnEnableState or function(character, name) return C_AddOns.GetAddOnEnableState(name, character) end
+local GetAddOnInfo = GetAddOnInfo or C_AddOns.GetAddOnInfo
+local GetNumAddOns = GetNumAddOns or C_AddOns.GetNumAddOns
+
 for i = 1,GetNumAddOns() do
 	local name, _, _, loadable = GetAddOnInfo(i)
 	if (name == "Bagnon_ItemInfo") then
