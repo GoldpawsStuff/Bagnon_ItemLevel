@@ -24,10 +24,10 @@
 
 --]]
 local _, Private =  ...
-for i = 1,GetNumAddOns() do
-	local name, _, _, loadable = GetAddOnInfo(i)
+for i = 1,C_AddOns.GetNumAddOns() do
+	local name, _, _, loadable = C_AddOns.GetAddOnInfo(i)
 	if (name == "Bagnon_ItemInfo") then
-		if (loadable and not(GetAddOnEnableState(UnitName("player"), i) == 0)) then
+		if (loadable and not(C_AddOns.GetAddOnEnableState(UnitName("player"), i) == 0)) then
 			Private.Incompatible = true
 			return
 		else
