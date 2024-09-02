@@ -31,7 +31,7 @@ end
 
 local Module = Bagnon:NewModule(Addon, Private)
 
-local Cache = LibStub("LibItemCache-2.0")
+local Cache = LibStub("LibItemCache-2.0", true)
 local Container = LibStub("C_Everywhere").Container
 
 -- Lua API
@@ -103,7 +103,9 @@ Module:AddUpdater(function(self)
 			-- Update the bagnon cache
 			if (not level and not self.info.link) then
 				self.info.link = Container.GetContainerItemLink(self:GetBag(), self:GetID())
-				self.info = Cache:RestoreItemData(self.info)
+				if (Cache) then
+					self.info = Cache:RestoreItemData(self.info)
+				end
 				level = self.info.level
 			end
 			message = level
