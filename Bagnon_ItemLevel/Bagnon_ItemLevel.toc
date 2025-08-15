@@ -1,4 +1,4 @@
-## Interface: 110107
+## Interface: 110107, 50500, 11507
 ## IconTexture: Interface\Addons\BagBrother\Art\Bagnon-Plugin.tga
 
 ## Plain Title: Bagnon ItemLevel
@@ -12,8 +12,8 @@
 ## X-Wago-ID: J96Eg8Gg
 ## X-License: Custom
 
-## OptionalDeps: TaintLess
-## RequiredDeps: Bagnon
+## OptionalDeps: TaintLess, Bagnon, Bagnonium
+## RequiredDeps: BagBrother
 ## SavedVariables: BagnonItemLevel_DB
 
 embeds.xml

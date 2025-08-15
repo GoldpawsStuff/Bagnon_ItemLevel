@@ -4,6 +4,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [2.0.101-Release] 2025-08-15
+### Added
+- Added compatibility with Classic MoP Client Patch 5.5.0.
+- Added compatibility with Bagnonium!
+
+### Removed
+- Removed dependency on the deprecated LibItemCache-2.0.
+
 ## [2.0.100-Release] 2025-06-18
 - Updated for Retail client patch 11.1.7.
 - Updated for Classic Era client patch 1.15.7.

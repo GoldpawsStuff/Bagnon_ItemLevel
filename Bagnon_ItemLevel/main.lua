@@ -29,9 +29,10 @@ if (Private.Incompatible) then
 	return
 end
 
-local Module = Bagnon:NewModule(Addon, Private)
+local Bagnon = Bagnon or Bagnonium
+local Module = Bagnon:NewModule(Addon, Private) -- "WildAddon-1.1"
 
-local Cache = LibStub("LibItemCache-2.0", true)
+--local Cache = LibStub("LibItemCache-2.0", true)
 local Container = LibStub("C_Everywhere").Container
 
 -- Lua API
@@ -42,8 +43,10 @@ local string_match = string.match
 local tonumber = tonumber
 
 -- WoW API
-local C_TooltipInfo, TooltipUtil = C_TooltipInfo, TooltipUtil
-local CreateFrame, GetItemInfoInstant, GetItemQualityColor = CreateFrame, GetItemInfoInstant, GetItemQualityColor
+local C_Item, C_TooltipInfo, TooltipUtil = C_Item, C_TooltipInfo, TooltipUtil
+local CreateFrame, GetItemQualityColor = CreateFrame, GetItemQualityColor
+local GetItemInfo = C_Item.GetItemInfo or GetItemInfo
+local GetItemInfoInstant = C_Item.GetItemInfoInstant or GetItemInfoInstant
 
 local retail = Private.IsRetail
 local cache = Private.cache
@@ -79,12 +82,11 @@ for i = 0, (retail and Enum.ItemQualityMeta.NumValues or NUM_LE_ITEM_QUALITYS) -
 end
 
 Module:AddUpdater(function(self)
-
 	local db = BagnonItemLevel_DB
 	local message, color, _
 
 	if (self.hasItem) then
-
+		
 		-- https://wowpedia.fandom.com/wiki/Enum.InventoryType
 		local class, equip, level, quality = self.info.class, self.info.equip, self.info.level, self.info.quality
 		if (not equip and self.info.hyperlink) then
@@ -100,25 +102,22 @@ Module:AddUpdater(function(self)
 			if (db.enableRarityColoring) then
 				color = quality and colors[quality]
 			end
-			-- Update the bagnon cache
-			if (not level and not self.info.link) then
-				self.info.link = Container.GetContainerItemLink(self:GetBag(), self:GetID())
-				if (Cache) then
-					self.info = Cache:RestoreItemData(self.info)
-				end
-				level = self.info.level
+			if (not level) then
+				--local itemName, itemLink, itemQuality, itemLevel, itemMinLevel, itemType, itemSubType, itemStackCount, itemEquipLoc, itemTexture, sellPrice, classID, subclassID, bindType, expansionID, setID, isCraftingReagent = GetItemInfo(itemInfo)
+				_, _, _, level = GetItemInfo(self.info.hyperlink)
+				self.info.level = level
 			end
 			message = level
 		end
 
-		-- Only retail tooltips contain iteminfo for gear,
-		-- but only retail tooltips need it.
+		-- Parse itemlevel in retail, and bag slots.
 		if (isgear and retail) or (isbag) then
 
 			if (retail) then
 
 				local tooltipData = C_TooltipInfo.GetBagItem(self:GetBag(), self:GetID())
 				if (tooltipData) then
+					
 					if (isgear) then
 						for i = 2,3 do
 							local msg = tooltipData.lines[i] and tooltipData.lines[i].leftText
@@ -179,6 +178,7 @@ Module:AddUpdater(function(self)
 
 			end
 		end
+
 	end
 
 	if (message and message > 1) then
