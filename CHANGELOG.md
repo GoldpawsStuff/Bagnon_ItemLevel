@@ -4,6 +4,9 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [2.0.102-Release] 2026-02-18
+- Updated toc version for WoW Retail Client Patch 12.0.1.
+
 ## [2.0.101-Release] 2025-08-15
 ### Added
 - Added compatibility with Classic MoP Client Patch 5.5.0.
