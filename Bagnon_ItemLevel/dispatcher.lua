@@ -70,9 +70,13 @@ end
 
 -- Forcefully update this module's buttons.
 Private.Forceupdate = function(module)
-	local cache, func = Private.cache, Private.owners[module]
+	local cache, func = Private.cache, module and Private.updatesByModule[module]
 	for item in next,cache do
-		func(item)
+		if (func) then
+			func(item)
+		else
+			Private.Dispatcher(item)
+		end
 	end
 end
 
