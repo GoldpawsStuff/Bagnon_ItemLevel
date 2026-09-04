@@ -30,6 +30,9 @@ if (Private.Incompatible) then
 end
 
 local Bagnon = Bagnon or Bagnonium
+if (not Bagnon) then
+	return
+end
 local Module = Bagnon:NewModule(Addon, Private) -- "WildAddon-1.1"
 
 --local Cache = LibStub("LibItemCache-2.0", true)
